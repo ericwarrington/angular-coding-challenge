@@ -1,15 +1,16 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from "@angular/core";
 
-import {Employee} from '../employee';
+import { Employee } from "../employee";
 
-@Component({
-  selector: 'app-employee',
-  templateUrl: './employee.component.html',
-  styleUrls: ['./employee.component.css']
+@Component(
+{
+	selector: "app-employee",
+	templateUrl: "./employee.component.html",
+	styleUrls: ["./employee.component.css"]
 })
-export class EmployeeComponent {
-  @Input() employee: Employee;
+export class EmployeeComponent
+{
+	@Input() employee: Employee;
 
-  constructor() {
-  }
+	constructor() {}
 }
