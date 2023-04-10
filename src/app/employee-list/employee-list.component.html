@@ -1,4 +1,4 @@
-<mat-grid-list class="employee-list" cols="4">
+<mat-grid-list class="employee-list" cols="2" rowHeight="2:1">
 	<mat-grid-tile *ngFor="let emp of employees">
 		<app-employee [employee]="emp" (edit-reporter)="edit()" (delete-reporter)="delete(emp, $event)"></app-employee>
 	</mat-grid-tile>
