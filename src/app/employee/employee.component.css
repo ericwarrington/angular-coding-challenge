@@ -1,0 +1,12 @@
+:host
+{
+	height: 100%;
+	width: 100%;
+}
+
+mat-card
+{
+	margin: 10px 10px;
+	height: calc(100% - 20px);
+	width: calc(100% - 20px);
+}

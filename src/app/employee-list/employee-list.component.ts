@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Observable, of } from "rxjs";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError, filter, map, switchMap } from "rxjs/operators";
 
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { Employee} from "../employee";
 import { EmployeeService } from "../employee.service";
 
@@ -16,7 +18,7 @@ export class EmployeeListComponent implements OnInit
 	employees: Employee[] = [];
 	errorMessage: string;
 
-	constructor(private employeeService: EmployeeService) {}
+	constructor(private employeeService: EmployeeService, private dialog: MatDialog) {}
 
 	ngOnInit(): void
 	{
@@ -34,13 +36,18 @@ export class EmployeeListComponent implements OnInit
 
 	delete(emp: Employee, reporterIndex: number): void
 	{
-		let directReports = [...emp.directReports];
-		directReports.splice(reporterIndex, 1);
+		this.dialog.open(ConfirmDialogComponent, { height: "250px", width: "400px" }).afterClosed()
+			.pipe(filter((val: boolean) => !!val))
+			.subscribe(() => 
+			{
+				let directReports = [...emp.directReports];
+				directReports.splice(reporterIndex, 1);
 
-		this.employeeService.save({ ...emp, directReports })
-			.pipe(switchMap(() => this.employeeService.getAll()))
-			.pipe(catchError((e) => this.handleError(e)))
-			.subscribe((emps) => this.employees = emps);
+				this.employeeService.save({ ...emp, directReports })
+					.pipe(switchMap(() => this.employeeService.getAll()))
+					.pipe(catchError((e) => this.handleError(e)))
+					.subscribe((emps) => this.employees = emps);
+			});
 	}
 
 	private handleError(e: Error | unknown): Observable<Array<Employee>>
