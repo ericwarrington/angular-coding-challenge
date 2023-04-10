@@ -1,27 +1,17 @@
 <mat-card class="employee">
 	<mat-card-header>
-		<mat-card-title>{{employee.lastName}}, {{employee.firstName}}</mat-card-title>
-		<mat-card-subtitle>ID: {{employee.id}} Total Reporters: {{totalReporters$ | async}}</mat-card-subtitle>
+		<mat-card-title>{{employee.firstName}} {{employee.lastName}}, {{employee.position}}</mat-card-title>
+		<mat-card-subtitle>ID: {{employee.id}} | Total Reporters: {{totalReporters$ | async}} | Salary: {{employee.compensation || "unknown"}}</mat-card-subtitle>
 	</mat-card-header>
 	<mat-card-content>
-		<dl>
-			<dt>Job Title</dt>
-			<dd>{{employee.position}}</dd>
-
-			<dt>Compensation</dt>
-			<dd>{{employee.compensation || "unknown"}}</dd>
-
-			<dt>Reporters</dt>
-			<dd>
-				<mat-list role="list">
-					<mat-list-item role="listitem" *ngFor="let emp of directReporters$ | async; index as i">
-						{{emp.firstName}} {{emp.lastName}}
-						<button mat-button (click)="edit()">Edit</button>
-						<button mat-button color="warn" (click)="delete(i)">Delete</button>
-					</mat-list-item>
-					<span *ngIf="(directReporters$ | async)?.length === 0">No reporters</span>
-				</mat-list>
-			</dd>
-		</dl>
+		<label for="repList">Reporters</label>
+		<mat-list id="repList" role="list">
+			<mat-list-item role="listitem" *ngFor="let emp of directReporters$ | async; index as i">
+				{{emp.firstName}} {{emp.lastName}}
+				<button mat-button (click)="edit()">Edit</button>
+				<button mat-button color="warn" (click)="delete(i)">Delete</button>
+			</mat-list-item>
+			<span *ngIf="(directReporters$ | async)?.length === 0">No reporters</span>
+		</mat-list>
 	</mat-card-content>
 </mat-card>
