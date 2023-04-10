@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { from, Observable, throwError } from "rxjs";
-import { catchError, flatMap } from "rxjs/operators";
+import { Observable, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
 
 import { Employee } from "./employee";
 
@@ -12,26 +12,25 @@ export class EmployeeService
 
 	constructor(private http: HttpClient) {}
 
-	getAll(): Observable<Employee>
+	public getAll(): Observable<Array<Employee>>
 	{
-		return this.http.get<Employee[]>(this.url)
-			.pipe(flatMap(emps => from(emps)))
-			.pipe(catchError(this.handleError));
+		return this.http.get<Array<Employee>>(this.url)
+			.pipe(catchError((e) => this.handleError(e)));
 	}
 
-	get(id: number): Observable<Employee>
+	public get(id: number): Observable<Employee>
 	{
 		return this.http.get<Employee>(`${this.url}/${id}`)
 			.pipe(catchError(this.handleError));
 	}
 
-	save(emp: Employee): Observable<Employee>
+	public save(emp: Employee): Observable<Employee>
 	{
 		const response = (!!emp.id) ? this.put(emp) : this.post(emp);
 		return response.pipe(catchError(this.handleError));
 	}
 
-	remove(emp: Employee): Observable<never>
+	public remove(emp: Employee): Observable<never>
 	{
 		return this.http.delete<never>(`${this.url}/${emp.id}`)
 			.pipe(catchError(this.handleError));

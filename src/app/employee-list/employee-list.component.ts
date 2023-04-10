@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { catchError, map, reduce } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { catchError, map } from "rxjs/operators";
 
 import { Employee} from "../employee";
 import { EmployeeService } from "../employee.service";
@@ -20,15 +21,14 @@ export class EmployeeListComponent implements OnInit
 	ngOnInit(): void
 	{
 		this.employeeService.getAll()
-			.pipe(reduce((emps, e: Employee) => emps.concat(e), []))
-			.pipe(map((emps) => this.employees = emps))
 			.pipe(catchError((e) => this.handleError(e)))
-			.subscribe();
+			.subscribe((emps) => this.employees = emps);
 	}
 
-	private handleError(e: Error | unknown): string
+	private handleError(e: Error | unknown): Observable<Array<Employee>>
 	{
 		console.error(e);
-		return this.errorMessage = (e instanceof Error) ? e.message : "Unable to retrieve employees";
+		this.errorMessage = e instanceof Error ? e.message : "Unable to retrieve employees.";
+		return of([]);
 	}
 }
