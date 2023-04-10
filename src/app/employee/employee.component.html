@@ -11,6 +11,17 @@
 			<dt>Compensation</dt>
 			<dd>{{employee.compensation || "unknown"}}</dd>
 
+			<dt>Reporters</dt>
+			<dd>
+				<mat-list role="list">
+					<mat-list-item role="listitem" *ngFor="let emp of directReporters$ | async; index as i">
+						{{emp.firstName}} {{emp.lastName}}
+						<button mat-button (click)="edit()">Edit</button>
+						<button mat-button color="warn" (click)="delete(i)">Delete</button>
+					</mat-list-item>
+					<span *ngIf="(directReporters$ | async)?.length === 0">No reporters</span>
+				</mat-list>
+			</dd>
 		</dl>
 	</mat-card-content>
 </mat-card>

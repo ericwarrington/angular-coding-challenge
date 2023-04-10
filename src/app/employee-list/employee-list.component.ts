@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable, of } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { catchError, map, switchMap } from "rxjs/operators";
 
 import { Employee} from "../employee";
 import { EmployeeService } from "../employee.service";
@@ -21,6 +21,24 @@ export class EmployeeListComponent implements OnInit
 	ngOnInit(): void
 	{
 		this.employeeService.getAll()
+			.pipe(catchError((e) => this.handleError(e)))
+			.subscribe((emps) => this.employees = emps);
+	}
+
+	edit(): void
+	{
+		//Not the best, implementation-wise, but it shows that the Events are working properly
+		//  in the absence of requirements for editing reporters
+		alert("edit");
+	}
+
+	delete(emp: Employee, reporterIndex: number): void
+	{
+		let directReports = [...emp.directReports];
+		directReports.splice(reporterIndex, 1);
+
+		this.employeeService.save({ ...emp, directReports })
+			.pipe(switchMap(() => this.employeeService.getAll()))
 			.pipe(catchError((e) => this.handleError(e)))
 			.subscribe((emps) => this.employees = emps);
 	}
