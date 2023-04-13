@@ -7,11 +7,17 @@
 		<label for="repList">Reporters</label>
 		<mat-list id="repList" role="list">
 			<mat-list-item role="listitem" *ngFor="let emp of directReporters$ | async; index as i">
-				{{emp.firstName}} {{emp.lastName}}
-				<button mat-button (click)="edit()">Edit</button>
-				<button mat-button color="warn" (click)="delete(i)">Delete</button>
+				<div class="space-between">
+					<div>{{emp.firstName}} {{emp.lastName}}</div>
+					<div>
+						<button mat-button (click)="edit()">Edit</button>
+						<button mat-button color="warn" (click)="delete(i)">Delete</button>
+					</div>
+				</div>
 			</mat-list-item>
-			<span *ngIf="(directReporters$ | async)?.length === 0">No reporters</span>
+			<mat-list-item *ngIf="(directReporters$ | async)?.length === 0">
+				No reporters
+			</mat-list-item>
 		</mat-list>
 	</mat-card-content>
 </mat-card>
